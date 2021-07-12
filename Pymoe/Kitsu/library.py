@@ -1,13 +1,14 @@
 import requests
 from ..errors import *
-from .helpers import SearchWrapper
+from .helpers import SearchWrapper, format_includes
+
 
 class KitsuLib:
     def __init__(self, api, header):
         self.apiurl = api
         self.header = header
 
-    def get(self, uid, filters=None):
+    def get(self, uid, filters=None, includes=None):
         """
         Get a user's list of library entries. While individual entries on this
         list don't show what type of entry it is, you can use the filters provided
@@ -15,12 +16,15 @@ class KitsuLib:
 
         :param uid: str: User ID to get library entries for
         :param filters: dict: Dictionary of filters for the library
+        :param includes: str/list: Related resources to include or None.
         :return: Results or ServerError
         :rtype: SearchWrapper or Exception
         """
         filters = self.__format_filters(filters)
+        includes = format_includes(includes)
 
-        r = requests.get(self.apiurl + "/users/{}/library-entries".format(uid), headers=self.header, params=filters)
+        r = requests.get(self.apiurl + "/users/{}/library-entries".format(uid),
+                         headers=self.header, params={**filters, **includes})
 
         if r.status_code != 200:
             raise ServerError
@@ -128,10 +132,12 @@ class KitsuLib:
         Format filters for the api query (to filter[<filter-name>])
 
         :param filters: dict: can be None, filters for the query
-        :return: the formatted filters, or None
+        :return: the formatted filters
         """
-        if filters is not None:
-            for k in filters:
-                if 'filter[' not in k:
-                    filters['filter[{}]'.format(k)] = filters.pop(k)
+        if filters is None:
+            return {}
+
+        for k in filters:
+            if 'filter[' not in k:
+                filters['filter[{}]'.format(k)] = filters.pop(k)
         return filters

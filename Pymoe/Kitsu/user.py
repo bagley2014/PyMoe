@@ -1,6 +1,6 @@
 import requests
 from ..errors import *
-from .helpers import SearchWrapper
+from .helpers import SearchWrapper, format_includes
 
 
 class KitsuUser:
@@ -8,15 +8,19 @@ class KitsuUser:
         self.apiurl = api
         self.header = header
 
-    def search(self, term):
+    def search(self, term, includes=None):
         """
         Search for a user by name.
 
         :param str term: What to search for.
+        :param str/list includes: Related resources to include or None.
         :return: The results as a SearchWrapper iterator or None if no results.
         :rtype: SearchWrapper or None
         """
-        r = requests.get(self.apiurl + "/users", params={"filter[name]": term}, headers=self.header)
+        includes = format_includes(includes)
+
+        r = requests.get(self.apiurl + "/users",
+                         params={"filter[name]": term, **includes}, headers=self.header)
 
         if r.status_code != 200:
             raise ServerError

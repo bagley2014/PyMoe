@@ -1,6 +1,21 @@
 import requests
 
 
+def format_includes(includes):
+    """
+    Format includes for the api query (to {'include' : <foo>,<bar>,<bat>})
+
+    :param includes: str or list: can be None, related resources to include
+    :return: dict: the formatted includes
+    """
+    result = None
+    if isinstance(includes, str):
+        result = includes
+    elif isinstance(includes, list):
+        result = ','.join(includes)
+    return {'include': result} if result is not None else {}
+
+
 class SearchWrapper(list):
     """
         :ivar _url str: Link to the next set of results
