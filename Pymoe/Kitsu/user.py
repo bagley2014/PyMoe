@@ -37,7 +37,8 @@ class KitsuUser:
         :rtype: Dictionary or Exception
         """
         final_dict = {"data": {"type": "users", "attributes": data}}
-        r = requests.post(self.apiurl + "/users", json=final_dict, headers=self.header)
+        r = requests.post(self.apiurl + "/users",
+                          json=final_dict, headers=self.header)
 
         if r.status_code != 200:
             raise ServerError
@@ -52,7 +53,8 @@ class KitsuUser:
         :return: The user's information or None
         :rtype: Dictionary or None
         """
-        r = requests.get(self.apiurl + "/users/{}".format(uid), headers=self.header)
+        r = requests.get(self.apiurl + "/users/{}".format(uid),
+                         headers=self.header)
 
         if r.status_code != 200:
             raise ServerError
@@ -77,7 +79,8 @@ class KitsuUser:
         final_dict = {"data": {"id": uid, "type": "users", "attributes": data}}
         final_headers = self.header
         final_headers['Authorization'] = "Bearer {}".format(token)
-        r = requests.patch(self.apiurl + "/users/{}".format(uid), json=final_dict, headers=final_headers)
+        r = requests.patch(self.apiurl + "/users/{}".format(uid),
+                           json=final_dict, headers=final_headers)
 
         if r.status_code != 200:
             raise ServerError

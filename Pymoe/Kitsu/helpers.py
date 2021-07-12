@@ -6,6 +6,7 @@ class SearchWrapper(list):
         :ivar _url str: Link to the next set of results
         :ivar header dict: Headers needed for API calls
     """
+
     def __init__(self, data, link, headers):
         """
         Initialize a new SearchWrapper. This is an API aware iterator that subclasses list.

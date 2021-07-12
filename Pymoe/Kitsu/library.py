@@ -49,15 +49,15 @@ class KitsuLib:
             "data": {
                 "type": "libraryEntries",
                 "attributes": data,
-                "relationships":{
-                    "user":{
-                        "data":{
+                "relationships": {
+                    "user": {
+                        "data": {
                             "id": user_id,
                             "type": "users"
                         }
                     },
-                    "media":{
-                        "data":{
+                    "media": {
+                        "data": {
                             "id": media_id,
                             "type": item_type
                         }
@@ -68,7 +68,8 @@ class KitsuLib:
         final_headers = self.header
         final_headers['Authorization'] = "Bearer {}".format(token)
 
-        r = requests.post(self.apiurl + "/library-entries", json=final_dict, headers=final_headers)
+        r = requests.post(self.apiurl + "/library-entries",
+                          json=final_dict, headers=final_headers)
 
         if r.status_code != 201:
             raise ConnectionError(r.text)
@@ -87,11 +88,13 @@ class KitsuLib:
         :return: True or ServerError
         :rtype: Bool or Exception
         """
-        final_dict = {"data": {"id": eid, "type": "libraryEntries", "attributes": data}}
+        final_dict = {
+            "data": {"id": eid, "type": "libraryEntries", "attributes": data}}
         final_headers = self.header
         final_headers['Authorization'] = "Bearer {}".format(token)
 
-        r = requests.patch(self.apiurl + "/library-entries/{}".format(eid), json=final_dict, headers=final_headers)
+        r = requests.patch(self.apiurl + "/library-entries/{}".format(eid),
+                           json=final_dict, headers=final_headers)
 
         if r.status_code != 200:
             raise ConnectionError(r.text)
@@ -110,7 +113,8 @@ class KitsuLib:
         final_headers = self.header
         final_headers['Authorization'] = "Bearer {}".format(token)
 
-        r = requests.delete(self.apiurl + "/library-entries/{}".format(eid), headers=final_headers)
+        r = requests.delete(
+            self.apiurl + "/library-entries/{}".format(eid), headers=final_headers)
 
         if r.status_code != 204:
             print(r.status_code)
